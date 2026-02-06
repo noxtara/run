@@ -26,10 +26,27 @@ jobs:
 | `api-url` | Noxtara API URL | No | `https://app.noxtara.com/api/main/client` |
 | `working-directory` | Directory to scan | No | `.` |
 | `cli-version` | CLI version | No | `latest` |
-| `name` | Scan entry name | No | Auto-generated |
-| `include` | Glob patterns to include files (one per line) | No | - |
-| `ignore` | Glob patterns to ignore (one per line) | No | - |
-| `format` | Archive format: zip or tar-gzip | No | `zip` |
+
+## Configuration
+
+Scan options (include patterns, ignore patterns, format, scan name) should be configured in a `noxtara.yaml` file in your repository root. The action will automatically read these settings.
+
+### Example noxtara.yaml
+
+```yaml
+scan:
+  scaSast:
+    from: .
+    name: "My Project Security Scan"
+    include:
+      - src/**
+      - lib/**
+    ignore:
+      - "**/node_modules/**"
+      - "**/*.test.ts"
+      - "dist/**"
+    format: zip
+```
 
 ## Examples
 
@@ -41,46 +58,13 @@ jobs:
     api-key: ${{ secrets.NOXTARA_API_KEY }}
 ```
 
-### With ignore patterns
+### With custom working directory
 
 ```yaml
 - uses: xcidic/noxtara-action@v1
   with:
     api-key: ${{ secrets.NOXTARA_API_KEY }}
-    ignore: |
-      **/node_modules/**
-      **/*.test.ts
-      dist/**
-```
-
-### With include patterns
-
-```yaml
-- uses: xcidic/noxtara-action@v1
-  with:
-    api-key: ${{ secrets.NOXTARA_API_KEY }}
-    include: |
-      src/**
-      lib/**
-    ignore: |
-      **/*.test.ts
-```
-
-### Custom scan configuration
-
-```yaml
-- uses: xcidic/noxtara-action@v1
-  with:
-    api-key: ${{ secrets.NOXTARA_API_KEY }}
-    name: "My Project Security Scan"
     working-directory: ./src
-    format: tar-gzip
-    include: |
-      src/**
-      lib/**
-    ignore: |
-      **/vendor/**
-      **/*.spec.js
 ```
 
 ## Requirements
