@@ -1,0 +1,79 @@
+name: "Run Noxtara Scan"
+description: "Run SCA/SAST security scans using @noxtara/cli"
+author: "xcidic"
+branding:
+  icon: "shield"
+  color: "blue"
+
+inputs:
+  api-key:
+    description: "Noxtara API key for authentication"
+    required: true
+  api-url:
+    description: "Noxtara API URL"
+    required: false
+    default: "https://app.noxtara.com/api/main/client"
+  working-directory:
+    description: "Directory to scan (relative to repository root)"
+    required: false
+    default: "."
+  cli-version:
+    description: "Version of @noxtara/cli to use"
+    required: false
+    default: "latest"
+  name:
+    description: "Custom name for the scan entry"
+    required: false
+    default: ""
+  include:
+    description: "Glob patterns to include files (one per line). Only files matching these patterns will be scanned."
+    required: false
+    default: ""
+  ignore:
+    description: "Glob patterns to ignore (one per line). Applied after include patterns."
+    required: false
+    default: ""
+  format:
+    description: "Archive format: zip or tar-gzip (default: zip)"
+    required: false
+    default: "zip"
+
+runs:
+  using: "composite"
+  steps:
+    - name: Setup Node.js
+      uses: actions/setup-node@v6
+      with:
+        node-version: "24"
+
+    - name: Install Noxtara CLI
+      shell: bash
+      run: npm install -g @noxtara/cli@${{ inputs.cli-version }}
+
+    - name: Run Noxtara Scan
+      shell: bash
+      working-directory: ${{ inputs.working-directory }}
+      run: |
+        INCLUDE_ARGS=""
+        if [ -n "${{ inputs.include }}" ]; then
+          while IFS= read -r pattern; do
+            [ -n "$pattern" ] && INCLUDE_ARGS="$INCLUDE_ARGS --include '$pattern'"
+          done <<< "${{ inputs.include }}"
+        fi
+
+        IGNORE_ARGS=""
+        if [ -n "${{ inputs.ignore }}" ]; then
+          while IFS= read -r pattern; do
+            [ -n "$pattern" ] && IGNORE_ARGS="$IGNORE_ARGS --ignore '$pattern'"
+          done <<< "${{ inputs.ignore }}"
+        fi
+
+        NAME_ARG=""
+        if [ -n "${{ inputs.name }}" ]; then
+          NAME_ARG="--name '${{ inputs.name }}'"
+        fi
+
+        noxtara scan sca-sast --from . $INCLUDE_ARGS $IGNORE_ARGS $NAME_ARG --format ${{ inputs.format }}
+      env:
+        NOXTARA_API_KEY: ${{ inputs.api-key }}
+        NOXTARA_API_URL: ${{ inputs.api-url }}
