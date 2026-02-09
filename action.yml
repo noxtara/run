@@ -9,8 +9,8 @@ inputs:
   api-key:
     description: "Noxtara API key for authentication"
     required: true
-  api-url:
-    description: "Noxtara API URL"
+  base-url:
+    description: "Noxtara API base URL"
     required: false
     default: "https://app.noxtara.com/api/main/client"
   working-directory:
@@ -40,4 +40,4 @@ runs:
       run: noxtara scan
       env:
         NOXTARA_API_KEY: ${{ inputs.api-key }}
-        NOXTARA_API_URL: ${{ inputs.api-url }}
+        NOXTARA_BASE_URL: ${{ inputs.base-url }}
