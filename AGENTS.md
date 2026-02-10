@@ -38,13 +38,11 @@ Before releasing:
 2. Verify inputs work correctly
 3. Check that env vars are passed properly
 
-## Git Submodules
+## Repository Location
 
-This repository is included as a git submodule in the main CLI repository at:
-- Path: `.context/run/`
-- URL: https://github.com/noxtara/run
+This repository is located at `.context/run/` within the main CLI repository. It is a regular git repository inside a gitignored directory (`.context/` is gitignored in the main CLI repo).
 
 When making changes:
-1. Edit in the submodule directory (`.context/run/`)
-2. Commit and push from there
-3. Update the submodule reference in the main repo
+1. Edit files in `.context/run/`
+2. Commit and push directly from there (it pushes to https://github.com/noxtara/run)
+3. Changes are independent of the main CLI repository
