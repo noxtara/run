@@ -25,6 +25,9 @@ inputs:
     description: "Automatically create PRs to update config with new entry IDs (requires gh CLI)"
     required: false
     default: "true"
+  github-token:
+    description: "GitHub token for creating PRs (auto-pr feature). Defaults to GITHUB_TOKEN."
+    required: false
 
 runs:
   using: "composite"
@@ -55,3 +58,4 @@ runs:
         NOXTARA_API_KEY: ${{ inputs.api-key }}
         NOXTARA_BASE_URL: ${{ inputs.base-url }}
         NOXTARA_AUTO_PR: ${{ inputs.auto-pr }}
+        GH_TOKEN: ${{ inputs.github-token || github.token }}
