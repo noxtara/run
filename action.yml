@@ -29,6 +29,15 @@ inputs:
 runs:
   using: "composite"
   steps:
+    - name: Check Runner OS
+      shell: bash
+      run: |
+        if [[ "${{ runner.os }}" != "Linux" ]]; then
+          echo "Error: This action only supports Linux runners. Current OS: ${{ runner.os }}"
+          exit 1
+        fi
+        echo "Running on Linux"
+
     - name: Setup Node.js
       uses: actions/setup-node@v6
       with:
