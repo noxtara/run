@@ -58,4 +58,4 @@ runs:
         NOXTARA_API_KEY: ${{ inputs.api-key }}
         NOXTARA_BASE_URL: ${{ inputs.base-url }}
         NOXTARA_AUTO_PR: ${{ inputs.auto-pr }}
-        GH_TOKEN: ${{ inputs.github-token || github.token }}
+        GITHUB_TOKEN: ${{ inputs.github-token || github.token }}
